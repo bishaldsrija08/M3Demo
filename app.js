@@ -37,8 +37,8 @@ app.post("/create", async (req, res) => {
 //create blog
 
 app.post("/blog", async (req, res) => {
-    const { description, title, subTitle } = req.body
-    if (!description || !title || !subTitle) {
+    const { description, title, subTitle, image } = req.body
+    if (!description || !title || !subTitle || !image) {
         return res.status(400).json({
             message: "All fields are required."
         })
@@ -46,7 +46,8 @@ app.post("/blog", async (req, res) => {
     await Blog.create({
         description,
         title,
-        subTitle
+        subTitle,
+        image
     })
     return res.status(200).json({
         message: "Blog created successfully."
