@@ -22,6 +22,9 @@ const upload = multer({ storage: storage })
 // Upload access
 app.use(express.static("uploads"))
 
+//Fs
+const fs = require("fs")
+
 // Create User
 app.post("/create", async (req, res) => {
     const { username, password, email } = req.body
@@ -70,15 +73,55 @@ app.post("/blog", upload.single("image"), async (req, res) => {
 
 app.get("/blogs", async (req, res) => {
     const blogs = await Blog.find()
+    if (blogs.length === 0) {
+        return res.status(400).json({
+            message: "No blogs found!"
+        })
+    }
     return res.status(200).json({
         message: "Blog fetched successfully.",
         data: blogs
     })
 })
 
+// Single blog
 
+app.get("/blog/:id", async (req, res) => {
+    const { id } = req.params
+    const blog = await Blog.findById(id)
+    if (!blog) {
+        return res.status(400).json({
+            message: "No blog found!"
+        })
+    }
+    res.status(200).json({
+        message: "Blog Fetched Successfully.",
+        data: blog
+    })
+})
 
+// delete blog
 
+app.delete("/blog/:id", async (req, res) => {
+    const { id } = req.params
+    const isBlog = await Blog.findById(id)
+    if (!isBlog) {
+        return res.status(400).json({
+            message: "Blog is not found!"
+        })
+    }
+    fs.unlink(`uploads/${isBlog.image}`, (err)=>{
+        if(err){
+            console.log("Error ayo")
+        }else{
+            console.log("Delete vayo")
+        }
+    })
+    await Blog.findByIdAndDelete({ _id: id })
+    return res.status(200).json({
+        message: "Blog deleted successfully."
+    })
+})
 
 
 
