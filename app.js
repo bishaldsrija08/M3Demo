@@ -110,10 +110,10 @@ app.delete("/blog/:id", async (req, res) => {
             message: "Blog is not found!"
         })
     }
-    fs.unlink(`uploads/${isBlog.image}`, (err)=>{
-        if(err){
+    fs.unlink(`uploads/${isBlog.image}`, (err) => {
+        if (err) {
             console.log("Error ayo")
-        }else{
+        } else {
             console.log("Delete vayo")
         }
     })
@@ -123,9 +123,34 @@ app.delete("/blog/:id", async (req, res) => {
     })
 })
 
+// update blog
+app.patch("/blog/:id", upload.single("image"), async (req, res) => {
+    const { id } = req.params
+    const { description, title, subTitle } = req.body
+    let fileName;
+    if (req.file) {
+        const data = await Blog.findById(id)
+        fs.unlink(`./uploads/${data.image}`, (err) => {
+            if (err) {
+                console.log("Deleted!")
+            } else {
+                console.log("Error ayo")
+            }
+        })
+        fileName = req.file.filename
+    }
+    await Blog.findByIdAndUpdate(id, {
+        title,
+        description,
+        subTitle,
+        image: fileName
+    })
+    return res.status(200).json({
+        message: "Blog updated successfully."
+    })
+})
 
-
-
+// Server
 const port = process.env.PORT
 app.listen(port, () => {
     console.log(`Server is running on port ${port}.`)
