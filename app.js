@@ -25,6 +25,15 @@ app.use(express.static("uploads"))
 //Fs
 const fs = require("fs")
 
+// Cors
+const cors = require("cors")
+app.use(cors(
+    {
+        origin: "http://localhost:5173",
+        optionsSuccessStatus: 200
+    }
+))
+
 // Create User
 app.post("/create", async (req, res) => {
     const { username, password, email } = req.body
