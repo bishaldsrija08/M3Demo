@@ -20,7 +20,7 @@ const { storage, multer } = require("./middleware/multerConfig")
 const upload = multer({ storage: storage })
 
 // Upload access
-app.use(express.static("uploads"))
+app.use(express.static("uploads/"))
 
 //Fs
 const fs = require("fs")
