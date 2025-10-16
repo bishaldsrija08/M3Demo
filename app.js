@@ -61,7 +61,10 @@ app.post("/blog", upload.single("image"), async (req, res) => {
             message: "Image file is required!"
         })
     }
-    const fileName = req.file.filename
+    // let fileName;
+    // if (req.file) {
+    //     fileName = req.file.filename
+    // }
     if (!description || !title || !subTitle) {
         return res.status(400).json({
             message: "All fields are required."
