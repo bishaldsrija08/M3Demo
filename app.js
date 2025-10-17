@@ -29,7 +29,7 @@ const fs = require("fs")
 const cors = require("cors")
 app.use(cors(
     {
-        origin: "http://localhost:5173",
+        origin: "https://m3-front-crud.vercel.app",
         optionsSuccessStatus: 200
     }
 ))
